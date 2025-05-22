@@ -9,6 +9,6 @@ CREATE TABLE artistas (
     foto VARCHAR(255),
     whatsapp VARCHAR(255),
     cpf varchar(255),
-    categoria_id BIGINT
+    categoria_id BIGINT NOT NULL
 );
 

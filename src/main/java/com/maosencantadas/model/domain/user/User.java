@@ -14,17 +14,21 @@ import java.util.Collection;
 import java.util.List;
 
 @Table(name = "users")
-@Entity(name = "users")
+@Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
     private String login;
     private String password;
+
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     public User(String login, String password, UserRole role){
@@ -49,24 +53,20 @@ public class User implements UserDetails {
     @Override
     public boolean isAccountNonExpired() {
         return true;
-        //return UserDetails.super.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
         return true;
-        //return UserDetails.super.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-        //return UserDetails.super.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
         return true;
-        //return UserDetails.super.isEnabled();
     }
 }

@@ -1,0 +1,8 @@
+CREATE TABLE imagens (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL UNIQUE,
+    pasta VARCHAR(1000) NOT NULL,
+    categoria_id BIGINT NOT NULL,
+    artista_id BIGINT NOT NULL,
+    produto_id BIGINT NOT NULL
+);

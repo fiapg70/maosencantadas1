@@ -30,7 +30,7 @@ public class Imagem {
     private String pasta;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoria_id , nullable = false")
+    @JoinColumn(name = "categoria_id" , nullable = false)
     private Categoria categoria;
 
     @ManyToOne(fetch = FetchType.LAZY)

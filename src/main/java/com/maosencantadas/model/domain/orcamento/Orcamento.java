@@ -41,17 +41,21 @@ public class Orcamento {
 
     @NotNull(message = "Data do orçamento é obrigatória")
     @Schema(description = "Data e hora em que o orçamento foi criado", example = "2024-04-27T15:30:00")
+    @Column(name = "data_orcamento")
     private LocalDateTime dataOrcamento;
 
     @Schema(description = "URL da imagem associada ao orçamento", example = "https://exampleorcamento.com/imagem.png")
+    @Column(name = "imagem_url")
     private String imagemUrl;
 
     @NotNull(message = "ClienteId é obrigatório")
     @Schema(description = "Identificador do cliente associado ao orçamento", example = "5")
+    @Column(name = "cliente_id")
     private Long clienteId;
 
     @NotNull(message = "ProdutoId é obrigatório")
     @Schema(description = "Identificador do produto associado ao orçamento", example = "3")
+    @Column(name = "produto_id")
     private Long produtoId;
 
     

@@ -5,5 +5,6 @@ CREATE TABLE produtos (
     tamanho VARCHAR(255),
     imagem_url VARCHAR(255),
     preco DECIMAL(10, 2),
-    categoria_id BIGINT
+    categoria_id BIGINT NOT NULL,
+    artista_id BIGINT NOT NULL
 );

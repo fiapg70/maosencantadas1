@@ -62,9 +62,6 @@ public class ArtistaController {
                     @ApiResponse(responseCode = "400", description = "Erro de validação nos dados enviados")
             }
     )
-
-
-
     @PostMapping
     public ResponseEntity<ArtistaDTO> criarArtista(
             @RequestBody

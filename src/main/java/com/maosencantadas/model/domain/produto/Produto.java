@@ -40,6 +40,7 @@ public class Produto {
     private String tamanho;
 
     @Schema(description = "URL da imagem do produto", example = "https://example.com/produto-imagem.jpg")
+    @Column(name = "imagem_url")
     private String imagemUrl;
 
     @DecimalMin(value = "0.01", message = "Preço deve ser maior que zero")

@@ -1,11 +1,9 @@
 package com.maosencantadas.model.repository;
 
+import com.maosencantadas.model.domain.imagem.Imagem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.maosencantadas.model.domain.imagem.Imagem;
-
-import java.util.Collection;
 import java.util.List;
 
 @Repository

@@ -1,11 +1,12 @@
 package com.maosencantadas.api.controller;
 
+import com.maosencantadas.api.dto.UserResponse;
+import com.maosencantadas.api.mapper.UserMapper;
+import com.maosencantadas.exception.RecursoEncontradoException;
 import com.maosencantadas.infra.security.TokenService;
-import com.maosencantadas.model.domain.user.AuthenticationDTO;
-import com.maosencantadas.model.domain.user.LoginResponseDTO;
-import com.maosencantadas.model.domain.user.RegisterDTO;
-import com.maosencantadas.model.domain.user.User;
+import com.maosencantadas.model.domain.user.*;
 import com.maosencantadas.model.repository.UserRepository;
+import com.maosencantadas.util.RestUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @Slf4j
 @RestController()
 @RequiredArgsConstructor
@@ -37,9 +40,11 @@ public class AuthenticationController {
     @Autowired
     private UserRepository repository;
 
-
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private UserMapper userMapper;
 
 
     @Operation(summary = "Login do usuário",
@@ -48,9 +53,8 @@ public class AuthenticationController {
                     @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
             }
     )
-
     @PostMapping("/login")
-    public ResponseEntity login (@RequestBody @Valid AuthenticationDTO data){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -66,14 +70,20 @@ public class AuthenticationController {
             }
     )
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if (this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
+    public ResponseEntity<UserResponse> register(@RequestBody @Valid RegisterDTO data) {
+        if (this.repository.findByLogin(data.login()).isPresent()) {
+            throw new RecursoEncontradoException("Usuário já cadastrado com o login: " + data.login());
+        }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.login(), encryptedPassword, data.role());
 
-        this.repository.save(newUser);
+        UserRole userRole = UserRole.getUserRole(data.role());
+        User newUser = new User(data.login(), encryptedPassword, userRole);
 
-        return  ResponseEntity.ok().build();
+        User saved = this.repository.save(newUser);
+
+        UserResponse userResponse = userMapper.toUserResponse(saved);
+        URI location = RestUtils.getUri(saved.getId());
+        return ResponseEntity.created(location).body(userResponse);
     }
 }
